@@ -1,5 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    font-family: "Noto Sans", sans-serif;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    /*background-color: #27377a;*/
+    background: rgb(25,10,103);
+    background: radial-gradient(circle, rgba(25,10,103,1) 0%, rgba(12,12,55,1) 100%);
+}
+
 .container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
+#groupNumberField {
+    border-radius: 5px;
+    border: solid 1px black;
+    padding: 5px;
+}
+
+#submitButton {
+    border-radius: 5px;
+    border: solid 1px #27377a;
+    background-color: #27377a;
+    padding: 10px 35px;
+    color: white;
+}
+
+#submitButton:hover,
+#submitButton:active {
+    background-color: black;
+}
+
+#logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.centerContent{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#content {
+    margin-top: 10%;
+    border: solid 6px #009ee5;
+    border-radius: 12px;
+    background-color: white;
+    padding: 35px;
+}
+
+#groupForm {
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+

@@ -1,31 +1,25 @@
 package com.main.laba_1.controllers;
 
+import com.main.laba_1.model.Schedule;
+import com.main.laba_1.service.ScheduleService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.logging.Logger;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @RestController
+@RequestMapping("api/v1/")
 public class MainController {
-    Logger logger = Logger.getLogger(getClass().getName());
+
+    static Logger logger = Logger.getLogger(MainController.class.getName());
     @GetMapping("/getsched")
-
-    public void getSched(@RequestParam(value = "groupNumber", defaultValue = "250503") String groupNumber) {
-        String template = "https://iis.bsuir.by/api/v1/schedule?studentGroup=%s";
-
-        String url = String.format(template, groupNumber);
-        WebClient.Builder builder = WebClient.builder();
-
-        String groupSchedule = builder.build()
-                .get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
-
-        logger.info("------------------------------------------------------");
-        logger.info(groupSchedule);
-        logger.info("------------------------------------------------------");
+    public ResponseEntity<?> getSchedule(@RequestParam(value = "groupNumber", defaultValue = "250503") String groupNumber) {
+        try {
+            Schedule schedule = ScheduleService.getSched(groupNumber);
+            return new ResponseEntity<>(schedule, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
