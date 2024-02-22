@@ -12,7 +12,7 @@ public class MainController {
     @GetMapping("/getsched")
     public ResponseEntity<Schedule> getSchedule(@RequestParam(value = "groupNumber", defaultValue = "250503") String groupNumber) {
         try {
-            Schedule schedule = ScheduleService.getSched(groupNumber);
+            Schedule schedule = ScheduleService.getScheduleObject(groupNumber);
             return new ResponseEntity<>(schedule, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

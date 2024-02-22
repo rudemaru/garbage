@@ -16,7 +16,7 @@ public class ScheduleService {
         throw new IllegalStateException("Utility class");
     }
     static Logger logger = Logger.getLogger(ScheduleService.class.getName());
-    public static Schedule getSched(@RequestParam(value = "groupNumber", defaultValue = "250503") String groupNumber){
+    public static Schedule getScheduleObject(@RequestParam(value = "groupNumber", defaultValue = "250503") String groupNumber){
         String template = "https://iis.bsuir.by/api/v1/schedule?studentGroup=%s";
 
         String url = String.format(template, groupNumber);
