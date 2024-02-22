@@ -11,15 +11,18 @@ import java.util.logging.Logger;
 
 @Service
 public class ScheduleService {
+
+    private ScheduleService() {
+        throw new IllegalStateException("Utility class");
+    }
     static Logger logger = Logger.getLogger(ScheduleService.class.getName());
     public static Schedule getSched(@RequestParam(value = "groupNumber", defaultValue = "250503") String groupNumber){
         String template = "https://iis.bsuir.by/api/v1/schedule?studentGroup=%s";
 
         String url = String.format(template, groupNumber);
-        //WebClient.Builder builder = WebClient.builder();
         WebClient webClient = WebClient.builder().build();
 
-        Schedule groupSchedule = null;
+        Schedule groupSchedule;
             groupSchedule = webClient
                     .get()
                     .uri(url)
@@ -31,7 +34,7 @@ public class ScheduleService {
 
         if(groupSchedule != null && groupSchedule.toString() != null) {
             logger.info("------------------------------------------------------");
-            String parsedObject = "OBJECT: " + groupSchedule.toString();
+            String parsedObject = "OBJECT: " + groupSchedule;
             logger.info(parsedObject);
             logger.info("------------------------------------------------------");
         }
