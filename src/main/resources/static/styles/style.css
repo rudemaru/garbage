@@ -8,7 +8,6 @@
 }
 
 body {
-    /*background-color: #27377a;*/
     background: rgb(25,10,103);
     background: radial-gradient(circle, rgba(25,10,103,1) 0%, rgba(12,12,55,1) 100%);
 }
