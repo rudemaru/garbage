@@ -33,10 +33,8 @@ public class ScheduleService {
                     .block();
 
         if(groupSchedule != null && groupSchedule.toString() != null) {
-            logger.info("------------------------------------------------------");
             String parsedObject = "OBJECT: " + groupSchedule;
             logger.info(parsedObject);
-            logger.info("------------------------------------------------------");
         }
 
         return groupSchedule;
