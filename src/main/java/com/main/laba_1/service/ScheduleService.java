@@ -1,6 +1,8 @@
 package com.main.laba_1.service;
 
 import com.main.laba_1.model.Schedule;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,11 +12,9 @@ import reactor.core.publisher.Mono;
 import java.util.logging.Logger;
 
 @Service
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ScheduleService {
 
-    private ScheduleService() {
-        throw new IllegalStateException("Utility class");
-    }
     static Logger logger = Logger.getLogger(ScheduleService.class.getName());
     public static Schedule getScheduleObject(@RequestParam(value = "groupNumber", defaultValue = "250503") String groupNumber){
         String template = "https://iis.bsuir.by/api/v1/schedule?studentGroup=%s";
@@ -28,7 +28,7 @@ public class ScheduleService {
                     .uri(url)
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError,
-                            error -> Mono.error(new RuntimeException("CLIENT ERROR")))
+                            error -> Mono.error(new RuntimeException("client-side error")))
                     .bodyToMono(Schedule.class)
                     .block();
 
