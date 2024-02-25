@@ -1,5 +1,9 @@
 # BSUIR GROUP SCHEDULE RestAPI
 
+## SONAR OVERVIEW 
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=rudemaru_garbage&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=rudemaru_garbage) [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=rudemaru_garbage&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=rudemaru_garbage)
+
+https://sonarcloud.io/summary/new_code?id=rudemaru_garbage
 
 ## What is this project for?
 This project implements simple RestAPI to call bsuir schedule api.
