@@ -25,6 +25,12 @@ body {
     padding: 5px;
 }
 
+#saveGroupField {
+    border-radius: 5px;
+    border: solid 1px black;
+    padding: 5px;
+}
+
 #submitButton {
     border-radius: 5px;
     border: solid 1px #27377a;
@@ -35,6 +41,19 @@ body {
 
 #submitButton:hover,
 #submitButton:active {
+    background-color: black;
+}
+
+#saveButton {
+    border-radius: 5px;
+    border: solid 1px #27377a;
+    background-color: #27377a;
+    padding: 10px 35px;
+    color: white;
+}
+
+#saveButton:hover,
+#saveButton:active {
     background-color: black;
 }
 
@@ -61,6 +80,14 @@ body {
 }
 
 #groupForm {
+    font-size: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#saveForm {
     font-size: 24px;
     display: flex;
     flex-direction: column;

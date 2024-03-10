@@ -1,7 +1,6 @@
 package com.main.laba_1.service;
 
 import com.main.laba_1.model.Schedule;
-import com.main.laba_1.model.StudentGroupDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatusCode;
@@ -39,29 +38,5 @@ public class ScheduleService {
         }
 
         return groupSchedule;
-    }
-
-    public static StudentGroupDto getStudentGroupDtoObject(@RequestParam(value = "groupNumber", defaultValue = "250503") String groupNumber){
-        String template = "https://iis.bsuir.by/api/v1/schedule?studentGroup=%s";
-
-        String url = String.format(template, groupNumber);
-        WebClient webClient = WebClient.builder().build();
-
-        StudentGroupDto studentGroupDto;
-            studentGroupDto = webClient
-                    .get()
-                    .uri(url)
-                    .retrieve()
-                    .onStatus(HttpStatusCode::is4xxClientError,
-                            error -> Mono.error(new RuntimeException("client-side error")))
-                    .bodyToMono(StudentGroupDto.class)
-                    .block();
-
-        if(studentGroupDto != null && studentGroupDto.toString() != null) {
-            String parsedObject = "OBJECT: " + studentGroupDto;
-            logger.info(parsedObject);
-        }
-
-        return studentGroupDto;
     }
 }
