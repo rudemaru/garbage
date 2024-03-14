@@ -40,9 +40,9 @@ public class GroupController {
         return groupService.findByName(name);
     }
 
-    @PostMapping("/groups")
-    public Group saveGroup(@RequestBody Group group) {
-        return groupService.saveGroup(group);
+    @PostMapping("/addgroup={groupNumber}")
+    public ResponseEntity<Group> addGroup(@PathVariable String groupNumber) {
+        return groupService.addGroup(groupNumber);
     }
 
     @PutMapping("/groups")
@@ -51,8 +51,8 @@ public class GroupController {
     }
 
     @DeleteMapping("/delgroup={id}")
-    public void deleteGroup(@PathVariable("id") Integer id) {
-        groupService.deleteGroup(id);
+    public ResponseEntity<Boolean> deleteGroup(@PathVariable("id") Integer id) {
+        return groupService.deleteGroup(id);
     }
     
     @GetMapping("/getgroupdto={groupNumber}")

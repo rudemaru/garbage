@@ -12,13 +12,7 @@ public class GroupDto {
     @JsonProperty("name")
     private String name;
     @JsonProperty("facultyAbbrev")
-    private String facultyAbbrev;
+    private String faculty;
     @JsonProperty("specialityName")
-    private String specialityName;
-    @JsonProperty("specialityAbbrev")
-    private String specialityAbbrev;
-    @JsonProperty("course")
-    private int course;
-    @JsonProperty("id")
-    private int id;
+    private String speciality;
 }

@@ -32,7 +32,7 @@ public class UserController {
         return userService.saveUser(user);
     }
 
-    @PutMapping("/assigngroup/{userId}/{groupNumber}")
+    @PatchMapping("/assigngroup/{userId}/{groupNumber}")
     public ResponseEntity<User> addUserToGroup(@PathVariable Integer userId, @PathVariable String groupNumber){
         return userService.setUserGroup(userId, groupNumber);
     }

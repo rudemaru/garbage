@@ -1,5 +1,6 @@
 package com.main.laba_1.service.impl;
 
+import com.main.laba_1.model.GroupDto;
 import com.main.laba_1.model.StudentGroupDto;
 import com.main.laba_1.model.entity.Group;
 import com.main.laba_1.model.entity.User;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Transactional
 @Service
 public class GroupServiceImpl implements GroupService {
 
@@ -44,29 +46,49 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
-    @Transactional
-    public Group saveGroup(Group group) {
-        return groupRepository.save(group);
-    }
-
-    @Override
-    @Transactional
     public Group updateGroup(Group group) {
         return groupRepository.save(group);
     }
 
     @Override
-    @Transactional
-    public void deleteGroup(Integer id) {
-        groupRepository.deleteById(id);
+    public ResponseEntity<Boolean> deleteGroup(Integer id) {
+        Group group = groupRepository.findById(id).orElse(null);
+        if(group != null){
+            Set<User> savedUsers = group.getSavedUsers();
+            Set<User> groupUsers = group.getGroupUsers();
+            for(User u : savedUsers){
+                u.getSavedGroups().remove(group);
+            }
+            for(User u : groupUsers){
+                u.setGroup(null);
+            }
+            groupRepository.deleteById(id);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(false, HttpStatus.BAD_REQUEST);
     }
 
-    @Transactional
     public ResponseEntity<Set<User>> getGroupList(String name){
         Group group = groupRepository.findByName(name).orElse(null);
         if(group != null){
             Set<User> groupList = group.getGroupUsers();
             return new ResponseEntity<>(groupList, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    public ResponseEntity<Group> addGroup(String groupNumber){
+        StudentGroupDto studentGroupDto = getStudentGroupDtoObject(groupNumber);
+        if(studentGroupDto != null && studentGroupDto.getGroupDto() != null) {
+            GroupDto groupDto = studentGroupDto.getGroupDto();
+            Group group = groupRepository.findByName(groupNumber).orElse(null);
+            if (group == null) {
+                group = new Group();
+            }
+            group.setName(groupDto.getName());
+            group.setFaculty(groupDto.getFaculty());
+            group.setSpeciality(groupDto.getSpeciality());
+            return new ResponseEntity<>(groupRepository.save(group), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
