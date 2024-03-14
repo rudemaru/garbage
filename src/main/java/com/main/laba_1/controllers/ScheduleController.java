@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/")
-public class MainController {
+public class ScheduleController {
     @GetMapping("/getsched")
     public ResponseEntity<Schedule> getSchedule(@RequestParam(value = "groupNumber", defaultValue = "250503") String groupNumber) {
         try {
