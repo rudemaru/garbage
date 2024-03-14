@@ -32,13 +32,33 @@ public class UserController {
         return userService.saveUser(user);
     }
 
+    @PutMapping("/assigngroup/{userId}/{groupNumber}")
+    public ResponseEntity<User> addUserToGroup(@PathVariable Integer userId, @PathVariable String groupNumber){
+        return userService.setUserGroup(userId, groupNumber);
+    }
+
+    @PutMapping("/savegroup/{userId}/{groupNumber}")
+    public ResponseEntity<User> userSaveGroup(@PathVariable Integer userId, @PathVariable String groupNumber){
+        return userService.userSaveGroup(userId, groupNumber);
+    }
+
     @PutMapping("/users")
     public User updateUser(@RequestBody User user) {
         return userService.updateUser(user);
     }
 
+    @DeleteMapping("/deleteusergroup/{userId}")
+    public ResponseEntity<User> deleteUserGroup(@PathVariable Integer userId){
+        return userService.deleteUserGroup(userId);
+    }
+
+    @DeleteMapping("/deletesavedgroup/{userId}/{groupNumber}")
+    public ResponseEntity<User> deleteSavedGroup(@PathVariable Integer userId, @PathVariable String groupNumber){
+        return userService.deleteSavedGroup(userId, groupNumber);
+    }
+
     @DeleteMapping("/deluser={id}")
-    public void deleteUser(@PathVariable("id") Integer id) {
-        userService.deleteUser(id);
+    public ResponseEntity<Boolean> deleteUser(@PathVariable("id") Integer id) {
+        return userService.deleteUser(id);
     }
 }

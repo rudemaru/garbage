@@ -2,6 +2,7 @@ package com.main.laba_1.controllers;
 
 import com.main.laba_1.model.StudentGroupDto;
 import com.main.laba_1.model.entity.Group;
+import com.main.laba_1.model.entity.User;
 import com.main.laba_1.service.GroupService;
 import com.main.laba_1.service.impl.GroupServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("api/v1/")
@@ -19,27 +21,37 @@ public class GroupController {
     }
 
     @GetMapping("/getgroups")
-    public ResponseEntity<Iterable<Group>> getgroups(){
+    public ResponseEntity<Iterable<Group>> getAllGroups(){
         return new ResponseEntity<>(groupService.findAllGroups(), HttpStatus.OK);
     }
 
     @GetMapping("/getgroup={id}")
-    public Optional<Group> findEmployeeById(@PathVariable("id") Integer id) {
+    public Optional<Group> findGroupById(@PathVariable("id") Integer id) {
         return groupService.findById(id);
     }
 
+    @GetMapping("/getgrouplist={groupNumber}")
+    public ResponseEntity<Set<User>> getGroupList(@PathVariable("groupNumber") String groupNumber) {
+        return groupService.getGroupList(groupNumber);
+    }
+
+    @GetMapping("/getgroupbyname={name}")
+    public Group findGroupByName(@PathVariable("name") String name) {
+        return groupService.findByName(name);
+    }
+
     @PostMapping("/groups")
-    public Group saveEmployee(@RequestBody Group group) {
+    public Group saveGroup(@RequestBody Group group) {
         return groupService.saveGroup(group);
     }
 
     @PutMapping("/groups")
-    public Group updateEmployee(@RequestBody Group group) {
+    public Group updateGroup(@RequestBody Group group) {
         return groupService.updateGroup(group);
     }
 
     @DeleteMapping("/delgroup={id}")
-    public void deleteEmployee(@PathVariable("id") Integer id) {
+    public void deleteGroup(@PathVariable("id") Integer id) {
         groupService.deleteGroup(id);
     }
     

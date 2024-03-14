@@ -28,7 +28,7 @@ public class ScheduleService {
                     .uri(url)
                     .retrieve()
                     .onStatus(HttpStatusCode::is4xxClientError,
-                            error -> Mono.error(new RuntimeException("client-side error")))
+                            error -> Mono.error(new RuntimeException(error.toString())))
                     .bodyToMono(Schedule.class)
                     .block();
 

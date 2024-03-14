@@ -1,10 +1,14 @@
 package com.main.laba_1.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,7 +19,7 @@ import lombok.Setter;
 public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "group_id")
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "name", nullable = false)
@@ -26,4 +30,12 @@ public class Group {
 
     @Column(name = "speciality", nullable = false)
     private String speciality;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "savedGroups")
+    private Set<User> savedUsers = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "group")
+    private Set<User> groupUsers = new HashSet<>();
 }
