@@ -1,4 +1,4 @@
-package com.main.laba_1.model;
+package com.main.laba_1.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @JsonIgnoreProperties(value = {"employeeDto","schedules"})
-public class StudentGroupDto {
+public class StudentGroupDTO {
     @JsonProperty("studentGroupDto")
-    private GroupDto groupDto;
+    private GroupDTO groupDto;
 }

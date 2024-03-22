@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/")
@@ -23,42 +23,56 @@ public class UserController {
     }
 
     @GetMapping("/getuser={id}")
-    public Optional<User> findUserById(@PathVariable("id") Integer id) {
-        return userService.findById(id);
+    public ResponseEntity<User> findUserById(@PathVariable("id") Integer id) {
+        return userService.findById(id) == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/getusersbyfaculty={faculty}")
+    public ResponseEntity<List<User>> getUsersByFaculty(@PathVariable("faculty") String faculty){
+        return userService.getUsersByFaculty(faculty) == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                new ResponseEntity<>(userService.getUsersByFaculty(faculty), HttpStatus.OK);
     }
 
     @PostMapping("/users")
-    public User saveUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    public ResponseEntity<User> saveUser(@RequestBody User user) {
+        userService.saveUser(user);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PatchMapping("/assigngroup/{userId}/{groupNumber}")
     public ResponseEntity<User> addUserToGroup(@PathVariable Integer userId, @PathVariable String groupNumber){
-        return userService.setUserGroup(userId, groupNumber);
+        userService.setUserGroup(userId, groupNumber);
+        return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/savegroup/{userId}/{groupNumber}")
     public ResponseEntity<User> userSaveGroup(@PathVariable Integer userId, @PathVariable String groupNumber){
-        return userService.userSaveGroup(userId, groupNumber);
+        userService.userSaveGroup(userId, groupNumber);
+        return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/users")
-    public User updateUser(@RequestBody User user) {
-        return userService.updateUser(user);
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        userService.updateUser(user);
+        return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/deleteusergroup/{userId}")
     public ResponseEntity<User> deleteUserGroup(@PathVariable Integer userId){
-        return userService.deleteUserGroup(userId);
+        userService.deleteUserGroup(userId);
+        return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/deletesavedgroup/{userId}/{groupNumber}")
     public ResponseEntity<User> deleteSavedGroup(@PathVariable Integer userId, @PathVariable String groupNumber){
-        return userService.deleteSavedGroup(userId, groupNumber);
+        userService.deleteSavedGroup(userId, groupNumber);
+        return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/deluser={id}")
     public ResponseEntity<Boolean> deleteUser(@PathVariable("id") Integer id) {
-        return userService.deleteUser(id);
+        userService.deleteUser(id);
+        return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

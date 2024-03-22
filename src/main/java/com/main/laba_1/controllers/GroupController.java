@@ -1,6 +1,6 @@
 package com.main.laba_1.controllers;
 
-import com.main.laba_1.model.StudentGroupDto;
+import com.main.laba_1.model.dto.StudentGroupDTO;
 import com.main.laba_1.model.entity.Group;
 import com.main.laba_1.model.entity.User;
 import com.main.laba_1.service.GroupService;
@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -26,39 +25,45 @@ public class GroupController {
     }
 
     @GetMapping("/getgroup={id}")
-    public Optional<Group> findGroupById(@PathVariable("id") Integer id) {
-        return groupService.findById(id);
+    public ResponseEntity<Group> findGroupById(@PathVariable("id") Integer id) {
+        return groupService.findById(id) == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                new ResponseEntity<>(groupService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("/getgrouplist={groupNumber}")
     public ResponseEntity<Set<User>> getGroupList(@PathVariable("groupNumber") String groupNumber) {
-        return groupService.getGroupList(groupNumber);
+        return groupService.getGroupList(groupNumber) == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                new ResponseEntity<>(groupService.getGroupList(groupNumber), HttpStatus.OK);
     }
 
     @GetMapping("/getgroupbyname={name}")
-    public Group findGroupByName(@PathVariable("name") String name) {
-        return groupService.findByName(name);
+    public ResponseEntity<Group> findGroupByName(@PathVariable("name") String name) {
+        return groupService.findByName(name) == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                new ResponseEntity<>(groupService.findByName(name), HttpStatus.OK);
     }
 
     @PostMapping("/addgroup={groupNumber}")
     public ResponseEntity<Group> addGroup(@PathVariable String groupNumber) {
-        return groupService.addGroup(groupNumber);
+        groupService.addGroup(groupNumber);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/groups")
-    public Group updateGroup(@RequestBody Group group) {
-        return groupService.updateGroup(group);
+    public ResponseEntity<Group> updateGroup(@RequestBody Group group) {
+        groupService.updateGroup(group);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/delgroup={id}")
-    public ResponseEntity<Boolean> deleteGroup(@PathVariable("id") Integer id) {
-        return groupService.deleteGroup(id);
+    public ResponseEntity<Group> deleteGroup(@PathVariable("id") Integer id) {
+        groupService.deleteGroup(id);
+        return new  ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
     
     @GetMapping("/getgroupdto={groupNumber}")
-    public ResponseEntity<StudentGroupDto> getStudentGroupDto(@PathVariable("groupNumber") String groupNumber) {
+    public ResponseEntity<StudentGroupDTO> getStudentGroupDto(@PathVariable("groupNumber") String groupNumber) {
         try {
-            StudentGroupDto studentGroupDto = GroupServiceImpl.getStudentGroupDtoObject(groupNumber);
+            StudentGroupDTO studentGroupDto = GroupServiceImpl.getStudentGroupDtoObject(groupNumber);
             return new ResponseEntity<>(studentGroupDto, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

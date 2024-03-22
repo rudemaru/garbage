@@ -1,4 +1,4 @@
-package com.main.laba_1.model;
+package com.main.laba_1.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GroupDto {
+public class GroupDTO {
     @JsonProperty("name")
     private String name;
     @JsonProperty("facultyAbbrev")
