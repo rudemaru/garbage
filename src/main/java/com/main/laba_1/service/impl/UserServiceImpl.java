@@ -2,9 +2,10 @@ package com.main.laba_1.service.impl;
 
 import com.main.laba_1.model.entity.Group;
 import com.main.laba_1.model.entity.User;
-import com.main.laba_1.repos.GroupRepository;
-import com.main.laba_1.repos.UserRepository;
+import com.main.laba_1.repositories.GroupRepository;
+import com.main.laba_1.repositories.UserRepository;
 import com.main.laba_1.service.UserService;
+import com.main.laba_1.utilities.CustomCache;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +16,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
+    private final CustomCache customCache;
 
-    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository) {
+    public UserServiceImpl(UserRepository userRepository, GroupRepository groupRepository, CustomCache customCache) {
         this.userRepository = userRepository;
         this.groupRepository = groupRepository;
+        this.customCache = customCache;
     }
 
     @Override
@@ -28,11 +31,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Integer id) {
+        if(customCache.containsKey(id.toString())){
+            return (User)customCache.getFromCache(id.toString());
+        }
+        if(!customCache.containsKey(id.toString()) && userRepository.findById(id).isPresent()){
+            customCache.addToCache(id.toString(), userRepository.findById(id).orElse(null));
+        }
         return userRepository.findById(id).orElse(null);
     }
 
     @Override
     public void saveUser(User user) {
+        if(customCache.containsKey(user.getId().toString())){
+            customCache.updateCache(
+                    user.getId().toString(), user
+            );
+        }
         userRepository.save(user);
     }
 
@@ -42,7 +56,7 @@ public class UserServiceImpl implements UserService {
         Group group = groupRepository.findByName(groupNumber).orElse(null);
         if (user != null && group != null) {
             user.setGroup(group);
-            userRepository.save(user);
+            saveUser(user);
         }
     }
 
@@ -51,7 +65,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElse(null);
         if(user != null){
             user.setGroup(null);
-            userRepository.save(user);
+            saveUser(user);
         }
     }
 
@@ -68,8 +82,7 @@ public class UserServiceImpl implements UserService {
 
         if(user != null && group != null){
             user.getSavedGroups().add(group);
-            userRepository.save(user);
-
+            saveUser(user);
         }
     }
 
@@ -81,13 +94,13 @@ public class UserServiceImpl implements UserService {
 
         if(user != null && group != null && user.getSavedGroups().contains(group)){
             user.getSavedGroups().remove(group);
-            userRepository.save(user);
+            saveUser(user);
         }
     }
 
     @Override
     public void updateUser(User user) {
-        userRepository.save(user);
+        saveUser(user);
     }
 
     @Override

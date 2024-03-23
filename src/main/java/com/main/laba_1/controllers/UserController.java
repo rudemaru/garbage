@@ -7,11 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("api/v1/")
 public class UserController {
     private final UserService userService;
+    Logger logger = Logger.getLogger(getClass().getName());
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -24,8 +26,13 @@ public class UserController {
 
     @GetMapping("/getuser={id}")
     public ResponseEntity<User> findUserById(@PathVariable("id") Integer id) {
-        return userService.findById(id) == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+        long startTime = System.nanoTime();
+        ResponseEntity<User> response = userService.findById(id) == null ? new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
+        long endTime = System.nanoTime();
+        String log = String.format("EXECUTION TIME: %.0f ms", ((double)endTime - (double)startTime)/1000000);
+        logger.info(log);
+        return response;
     }
 
     @GetMapping("/getusersbyfaculty={faculty}")

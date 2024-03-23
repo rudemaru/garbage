@@ -8,6 +8,7 @@ import java.util.Set;
 
 public interface GroupService {
     List<Group> findAllGroups();
+    void saveGroup(Group group);
     Group findById(Integer id);
     Group findByName(String name);
     void updateGroup(Group group);

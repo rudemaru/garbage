@@ -1,4 +1,4 @@
-package com.main.laba_1.repos;
+package com.main.laba_1.repositories;
 
 import com.main.laba_1.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

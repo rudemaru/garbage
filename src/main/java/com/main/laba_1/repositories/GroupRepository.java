@@ -1,4 +1,4 @@
-package com.main.laba_1.repos;
+package com.main.laba_1.repositories;
 
 import com.main.laba_1.model.entity.Group;
 import org.springframework.data.jpa.repository.JpaRepository;

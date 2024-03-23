@@ -4,11 +4,12 @@ import com.main.laba_1.model.dto.GroupDTO;
 import com.main.laba_1.model.dto.StudentGroupDTO;
 import com.main.laba_1.model.entity.Group;
 import com.main.laba_1.model.entity.User;
-import com.main.laba_1.repos.GroupRepository;
+import com.main.laba_1.repositories.GroupRepository;
 import com.main.laba_1.service.GroupService;
 
 import java.util.*;
 
+import com.main.laba_1.utilities.CustomCache;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +21,24 @@ import reactor.core.publisher.Mono;
 @Service
 public class GroupServiceImpl implements GroupService {
     private final GroupRepository groupRepository;
+    private final CustomCache customCache;
 
-    public GroupServiceImpl(GroupRepository groupRepository) {
+    public GroupServiceImpl(GroupRepository groupRepository, CustomCache customCache) {
         this.groupRepository = groupRepository;
+        this.customCache = customCache;
+    }
+
+    @Override
+    public void saveGroup(Group group) {
+        Set<User> savedUsers = group.getSavedUsers();
+        Set<User> groupUsers = group.getGroupUsers();
+        for(User u : savedUsers){
+            customCache.updateCache(u.getId().toString(), u);
+        }
+        for(User u : groupUsers){
+            customCache.updateCache(u.getId().toString(), u);
+        }
+        groupRepository.save(group);
     }
 
     @Override
@@ -42,7 +58,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public void updateGroup(Group group) {
-        groupRepository.save(group);
+        saveGroup(group);
     }
 
     @Override
@@ -53,9 +69,11 @@ public class GroupServiceImpl implements GroupService {
             Set<User> groupUsers = group.getGroupUsers();
             for(User u : savedUsers){
                 u.getSavedGroups().remove(group);
+                customCache.updateCache(u.getId().toString(), u);
             }
             for(User u : groupUsers){
                 u.setGroup(null);
+                customCache.updateCache(u.getId().toString(), u);
             }
             groupRepository.deleteById(id);
         }
@@ -80,7 +98,7 @@ public class GroupServiceImpl implements GroupService {
             group.setName(groupDto.getName());
             group.setFaculty(groupDto.getFaculty());
             group.setSpeciality(groupDto.getSpeciality());
-            groupRepository.save(group);
+            saveGroup(group);
         }
     }
 
